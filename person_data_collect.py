@@ -10,9 +10,8 @@ dict = {101: [1, 7], 102: [1, 8], 103: [1, 9], 104: [1, 10], 105: [1, 11], 106: 
         125: [5, 7], 126: [5, 8], 127: [5, 9], 128: [5, 10], 129: [5, 11], 130: [5, 12],
         131: [6, 7], 132: [6, 8], 133: [6, 9], 134: [6, 10], 135: [6, 11], 136: [6, 12]}
 
-train_data = np.zeros((1, 22))
-
 for i in range(1, 6):
+    train_data = np.zeros((1, 22))
     for j in range(1, 13):
         path = mathModel + "/temporary/train_data/S" + str(i) + "/S" + str(i) + "c" + str(j) + '_train_data.csv'
         csv = np.loadtxt(path, delimiter=",")
@@ -28,28 +27,17 @@ for i in range(1, 6):
         hstack = np.hstack((csv, np.array(label).reshape(-1, 1)))
         train_data = np.vstack((train_data, hstack))
 
-train_data = np.delete(train_data, 0, 0)
+    train_data = np.delete(train_data, 0, 0)
+    train_data = np.delete(train_data, -2, 1)
 
-data_shape = train_data.shape
-data_shape_ = data_shape[0]
-for i in range(0, data_shape_):
-    if (i >= train_data.shape[0]): break
-    if int(train_data[i, -2]) == 100:
-        train_data = np.delete(train_data, i, 0)
-        i -= 1
-        data_shape_ -= 1
+    shape = train_data.shape
 
-
-
-shape = train_data.shape
-train_data = np.delete(train_data, -2, 1)
-
-len = shape[0]
-for i in range(0, len):
-    if i >= len: break
-    if int(train_data[i, -1]) == 2:
-        train_data = np.delete(train_data, i, 0)
-        i -= 1
-        len -= 1
-
-np.savetxt("train_data.csv", train_data, delimiter=",", fmt='%f')
+    len = shape[0]
+    for k in range(0, len):
+        if k >= len: break
+        if int(train_data[k, -1]) == 2:
+            train_data = np.delete(train_data, k, 0)
+            k -= 1
+            len -= 1
+    personIndex = str(i)
+    np.savetxt("S"+personIndex + "train_data.csv", train_data, delimiter=",", fmt='%f')
